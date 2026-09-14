@@ -1,13 +1,12 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --game-ink: #1c2a32;
+  --game-muted: #5b6b74;
+  --game-surface: #f3efe6;
+  --game-border: #c9d2d8;
+  --game-accent: #0f766e;
+  --game-accent-strong: #0b5f59;
+  --background: #e7eef2;
+  --foreground: var(--game-ink);
 }
 
 html {
@@ -25,8 +24,10 @@ body {
   display: flex;
   flex-direction: column;
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% -10%, #d7ebe7 0%, transparent 55%),
+    linear-gradient(165deg, #eef3f6 0%, #dfe8ee 48%, #d4e0e6 100%);
+  font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -42,8 +43,6 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+button {
+  font: inherit;
 }

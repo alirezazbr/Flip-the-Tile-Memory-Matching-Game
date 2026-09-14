@@ -1,0 +1,180 @@
+.screen {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.panel {
+  display: flex;
+  width: min(100%, 28rem);
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--game-muted);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
+  font-size: clamp(2.5rem, 8vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--game-ink);
+}
+
+.instructions {
+  margin: 0;
+  max-width: 24rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--game-muted);
+}
+
+.difficulty {
+  width: 100%;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.difficultyLegend {
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--game-ink);
+}
+
+.difficultyOptions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.difficultyOption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.85rem 0.5rem;
+  border: 1px solid var(--game-border);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--game-surface) 88%, white);
+  color: var(--game-ink);
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.difficultyOption:hover {
+  border-color: var(--game-accent);
+  transform: translateY(-1px);
+}
+
+.difficultyOption:focus-visible {
+  outline: 3px solid var(--game-accent);
+  outline-offset: 3px;
+}
+
+.difficultyOptionSelected {
+  border-color: var(--game-accent);
+  background: color-mix(in srgb, var(--game-accent) 16%, var(--game-surface));
+  box-shadow: inset 0 0 0 1px var(--game-accent);
+}
+
+.difficultyLabel {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.difficultyMeta {
+  font-size: 0.8rem;
+  color: var(--game-muted);
+}
+
+.startButton {
+  width: min(100%, 14rem);
+  margin-top: 0.35rem;
+  padding: 0.9rem 1.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--game-accent);
+  color: #fff8f0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.startButton:hover {
+  background: var(--game-accent-strong);
+  transform: translateY(-1px);
+}
+
+.startButton:active {
+  transform: translateY(0);
+}
+
+.startButton:focus-visible {
+  outline: 3px solid var(--game-ink);
+  outline-offset: 3px;
+}
+
+.soundToggle {
+  border: 0;
+  background: transparent;
+  color: var(--game-muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.soundToggle:hover {
+  color: var(--game-ink);
+}
+
+.soundToggle:focus-visible {
+  outline: 3px solid var(--game-accent);
+  outline-offset: 3px;
+  border-radius: 0.25rem;
+}
+
+@media (max-width: 480px) {
+  .difficultyOptions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .difficultyOption,
+  .startButton {
+    transition: none;
+  }
+
+  .difficultyOption:hover,
+  .startButton:hover {
+    transform: none;
+  }
+}
