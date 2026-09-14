@@ -1,4 +1,4 @@
-import { DIFFICULTIES } from "@/lib/memory-game/constants";
+import { DifficultySelector } from "@/components/memory-game/DifficultySelector/DifficultySelector";
 import type { Difficulty } from "@/types/memory-game";
 import styles from "./StartScreen.module.css";
 
@@ -9,8 +9,6 @@ export interface StartScreenProps {
   onStart: () => void;
   onToggleSound: () => void;
 }
-
-const DIFFICULTY_OPTIONS = Object.values(DIFFICULTIES);
 
 export function StartScreen({
   difficulty,
@@ -31,38 +29,10 @@ export function StartScreen({
           out of attempts.
         </p>
 
-        <fieldset className={styles.difficulty}>
-          <legend className={styles.difficultyLegend}>Difficulty</legend>
-          <div
-            className={styles.difficultyOptions}
-            role="radiogroup"
-            aria-label="Select difficulty"
-          >
-            {DIFFICULTY_OPTIONS.map((option) => {
-              const selected = option.id === difficulty;
-
-              return (
-                <button
-                  key={option.id}
-                  type="button"
-                  role="radio"
-                  aria-checked={selected}
-                  className={
-                    selected
-                      ? `${styles.difficultyOption} ${styles.difficultyOptionSelected}`
-                      : styles.difficultyOption
-                  }
-                  onClick={() => onDifficultyChange(option.id)}
-                >
-                  <span className={styles.difficultyLabel}>{option.label}</span>
-                  <span className={styles.difficultyMeta}>
-                    {option.rows} × {option.columns}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </fieldset>
+        <DifficultySelector
+          value={difficulty}
+          onChange={onDifficultyChange}
+        />
 
         <button type="button" className={styles.startButton} onClick={onStart}>
           Start
