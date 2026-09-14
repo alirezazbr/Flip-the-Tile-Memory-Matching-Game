@@ -137,6 +137,23 @@ function flipTilesBack(
   }
 
   const [firstId, secondId] = tileIds;
+
+  if (firstId === secondId) {
+    return state;
+  }
+
+  const firstTile = state.tiles.find((tile) => tile.id === firstId);
+  const secondTile = state.tiles.find((tile) => tile.id === secondId);
+
+  if (!firstTile || !secondTile) {
+    return state;
+  }
+
+  // Matched pairs must stay face-up; only true mismatches flip back.
+  if (isMatch(firstTile, secondTile) || firstTile.isMatched || secondTile.isMatched) {
+    return state;
+  }
+
   const tiles = state.tiles.map((tile) =>
     tile.id === firstId || tile.id === secondId
       ? { ...tile, isFlipped: false }

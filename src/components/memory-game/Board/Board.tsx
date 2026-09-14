@@ -30,6 +30,7 @@ export function Board({
       }}
       role="grid"
       aria-label={`Memory board, ${DIFFICULTIES[difficulty].rows} by ${columns}`}
+      aria-busy={status === "checking" || undefined}
     >
       {tiles.map((tile) => (
         <div key={tile.id} className={styles.cell} role="gridcell">
