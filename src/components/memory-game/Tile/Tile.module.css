@@ -95,6 +95,12 @@
   opacity: 0.96;
 }
 
+.selected .tileBack {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--game-ink) 35%, white),
+    0 6px 14px rgb(28 42 50 / 14%);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tileInner {
     transition-duration: 1ms;

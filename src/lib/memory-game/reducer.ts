@@ -1,5 +1,6 @@
 import { DEFAULT_DIFFICULTY, DIFFICULTIES } from "@/lib/memory-game/constants";
 import {
+  canSelectTile,
   createGameTiles,
   isGameLost,
   isGameWon,
@@ -58,20 +59,7 @@ function startPlaying(state: GameState): GameState {
 }
 
 function selectTile(state: GameState, tileId: string): GameState {
-  if (state.status !== "playing" || state.isPaused) {
-    return state;
-  }
-
-  if (state.selectedTileIds.length >= 2) {
-    return state;
-  }
-
-  if (state.selectedTileIds.includes(tileId)) {
-    return state;
-  }
-
-  const tile = state.tiles.find((entry) => entry.id === tileId);
-  if (!tile || tile.isMatched || tile.isFlipped) {
+  if (!canSelectTile(state, tileId)) {
     return state;
   }
 

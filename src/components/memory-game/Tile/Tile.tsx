@@ -89,7 +89,7 @@ function TileShapeIcon({
 
 export function Tile({ tile, onSelect, interactionDisabled = false }: TileProps) {
   const isFaceUp = tile.isFlipped || tile.isMatched;
-  const isDisabled = tile.isMatched || interactionDisabled;
+  const isDisabled = tile.isMatched || tile.isFlipped || interactionDisabled;
 
   const ariaLabel = tile.isMatched
     ? `Matched tile showing ${tile.shape}`
@@ -104,6 +104,7 @@ export function Tile({ tile, onSelect, interactionDisabled = false }: TileProps)
         styles.tile,
         isFaceUp ? styles.flipped : "",
         tile.isMatched ? styles.matched : "",
+        tile.isFlipped && !tile.isMatched ? styles.selected : "",
       ]
         .filter(Boolean)
         .join(" ")}
@@ -111,7 +112,12 @@ export function Tile({ tile, onSelect, interactionDisabled = false }: TileProps)
       aria-label={ariaLabel}
       aria-pressed={isFaceUp}
       disabled={isDisabled}
-      onClick={() => onSelect(tile.id)}
+      onClick={() => {
+        if (isDisabled) {
+          return;
+        }
+        onSelect(tile.id);
+      }}
     >
       <span className={styles.tileInner}>
         <span className={styles.tileFront} aria-hidden="true">

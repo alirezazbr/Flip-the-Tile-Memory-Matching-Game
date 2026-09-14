@@ -1,6 +1,6 @@
 import { DIFFICULTIES, TILE_COLORS, TILE_SHAPES } from "@/lib/memory-game/constants";
 import { shuffle } from "@/lib/memory-game/shuffle";
-import type { Difficulty, Tile } from "@/types/memory-game";
+import type { Difficulty, GameState, Tile } from "@/types/memory-game";
 
 function padIndex(index: number, width = 3): string {
   return String(index).padStart(width, "0");
@@ -33,6 +33,31 @@ export function createGameTiles(difficulty: Difficulty): Tile[] {
   }
 
   return shuffle(tiles);
+}
+
+/** Whether a tile may be selected under current game rules. */
+export function canSelectTile(
+  state: Pick<GameState, "status" | "isPaused" | "selectedTileIds" | "tiles">,
+  tileId: string,
+): boolean {
+  if (state.status !== "playing" || state.isPaused) {
+    return false;
+  }
+
+  if (state.selectedTileIds.length >= 2) {
+    return false;
+  }
+
+  if (state.selectedTileIds.includes(tileId)) {
+    return false;
+  }
+
+  const tile = state.tiles.find((entry) => entry.id === tileId);
+  if (!tile || tile.isMatched || tile.isFlipped) {
+    return false;
+  }
+
+  return true;
 }
 
 /** Match by shared pairId — never by unique tile id. */
