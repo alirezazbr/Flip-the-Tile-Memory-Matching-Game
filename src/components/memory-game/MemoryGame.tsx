@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Board } from "@/components/memory-game/Board/Board";
 import { ControlBar } from "@/components/memory-game/ControlBar/ControlBar";
 import { GameResult } from "@/components/memory-game/GameResult/GameResult";
 import { Scoreboard } from "@/components/memory-game/Scoreboard/Scoreboard";
 import { StartScreen } from "@/components/memory-game/StartScreen/StartScreen";
+import { useGameSound } from "@/hooks/memory-game/useGameSound";
 import { useMemoryGame } from "@/hooks/memory-game/useMemoryGame";
 import { isTerminalStatus } from "@/lib/memory-game/game";
 import styles from "./MemoryGame.module.css";
@@ -20,6 +22,51 @@ export function MemoryGame() {
     setDifficulty,
     toggleSound,
   } = useMemoryGame();
+  const sound = useGameSound(state.isSoundEnabled);
+  const previousRef = useRef({
+    status: state.status,
+    matchedCount: state.matchedTileIds.length,
+    selectedCount: state.selectedTileIds.length,
+  });
+
+  useEffect(() => {
+    const previous = previousRef.current;
+
+    if (state.selectedTileIds.length > previous.selectedCount) {
+      sound.playFlip();
+    }
+
+    if (state.matchedTileIds.length > previous.matchedCount) {
+      sound.playMatch();
+    }
+
+    if (
+      previous.status === "checking" &&
+      state.status === "playing" &&
+      state.matchedTileIds.length === previous.matchedCount
+    ) {
+      sound.playMismatch();
+    }
+
+    if (state.status === "won" && previous.status !== "won") {
+      sound.playWin();
+    }
+
+    if (state.status === "lost" && previous.status !== "lost") {
+      sound.playLoss();
+    }
+
+    previousRef.current = {
+      status: state.status,
+      matchedCount: state.matchedTileIds.length,
+      selectedCount: state.selectedTileIds.length,
+    };
+  }, [
+    sound,
+    state.matchedTileIds.length,
+    state.selectedTileIds.length,
+    state.status,
+  ]);
 
   const statusMessage =
     state.status === "won"
@@ -42,7 +89,10 @@ export function MemoryGame() {
           difficulty={state.difficulty}
           isSoundEnabled={state.isSoundEnabled}
           onDifficultyChange={setDifficulty}
-          onStart={startGame}
+          onStart={() => {
+            sound.playClick();
+            startGame();
+          }}
           onToggleSound={toggleSound}
         />
       ) : (
@@ -51,8 +101,14 @@ export function MemoryGame() {
           <ControlBar
             isSoundEnabled={state.isSoundEnabled}
             restartDisabled={isRestarting || state.isPaused}
-            onRestart={restartGame}
-            onExit={exitGame}
+            onRestart={() => {
+              sound.playClick();
+              restartGame();
+            }}
+            onExit={() => {
+              sound.playClick();
+              exitGame();
+            }}
             onToggleSound={toggleSound}
           />
           <div className={styles.boardShell}>
@@ -69,8 +125,14 @@ export function MemoryGame() {
                 score={state.score}
                 attempts={state.attempts}
                 maxAttempts={state.maxAttempts}
-                onPlayAgain={restartGame}
-                onChangeDifficulty={exitGame}
+                onPlayAgain={() => {
+                  sound.playClick();
+                  restartGame();
+                }}
+                onChangeDifficulty={() => {
+                  sound.playClick();
+                  exitGame();
+                }}
               />
             ) : null}
           </div>
