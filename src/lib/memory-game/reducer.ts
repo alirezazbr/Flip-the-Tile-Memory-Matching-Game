@@ -94,6 +94,10 @@ function matchTiles(
   state: GameState,
   tileIds: [string, string],
 ): GameState {
+  if (state.status !== "checking") {
+    return state;
+  }
+
   const [firstId, secondId] = tileIds;
   const tiles = state.tiles.map((tile) =>
     tile.id === firstId || tile.id === secondId
@@ -123,6 +127,10 @@ function flipTilesBack(
   state: GameState,
   tileIds: [string, string],
 ): GameState {
+  if (state.status !== "checking") {
+    return state;
+  }
+
   const [firstId, secondId] = tileIds;
   const tiles = state.tiles.map((tile) =>
     tile.id === firstId || tile.id === secondId
