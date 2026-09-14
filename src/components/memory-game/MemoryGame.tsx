@@ -1,6 +1,7 @@
 "use client";
 
 import { Board } from "@/components/memory-game/Board/Board";
+import { ControlBar } from "@/components/memory-game/ControlBar/ControlBar";
 import { Scoreboard } from "@/components/memory-game/Scoreboard/Scoreboard";
 import { StartScreen } from "@/components/memory-game/StartScreen/StartScreen";
 import { useMemoryGame } from "@/hooks/memory-game/useMemoryGame";
@@ -11,6 +12,8 @@ export function MemoryGame() {
     state,
     startGame,
     selectTile,
+    restartGame,
+    exitGame,
     setDifficulty,
     toggleSound,
   } = useMemoryGame();
@@ -28,6 +31,13 @@ export function MemoryGame() {
       ) : (
         <div className={styles.playArea}>
           <Scoreboard state={state} />
+          <ControlBar
+            isSoundEnabled={state.isSoundEnabled}
+            restartDisabled={state.isPaused}
+            onRestart={restartGame}
+            onExit={exitGame}
+            onToggleSound={toggleSound}
+          />
           <Board
             tiles={state.tiles}
             difficulty={state.difficulty}

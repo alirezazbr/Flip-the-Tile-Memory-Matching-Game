@@ -1,0 +1,44 @@
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  width: min(100%, 40rem);
+}
+
+.button {
+  min-width: 6.5rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--game-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--game-surface) 90%, white);
+  color: var(--game-ink);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.button:hover:not(:disabled) {
+  border-color: var(--game-accent);
+  background: color-mix(in srgb, var(--game-accent) 12%, white);
+}
+
+.button:focus-visible {
+  outline: 3px solid var(--game-accent);
+  outline-offset: 3px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+}
