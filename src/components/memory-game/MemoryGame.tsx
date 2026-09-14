@@ -5,8 +5,8 @@ import { ControlBar } from "@/components/memory-game/ControlBar/ControlBar";
 import { GameResult } from "@/components/memory-game/GameResult/GameResult";
 import { Scoreboard } from "@/components/memory-game/Scoreboard/Scoreboard";
 import { StartScreen } from "@/components/memory-game/StartScreen/StartScreen";
-import { isTerminalStatus } from "@/lib/memory-game/game";
 import { useMemoryGame } from "@/hooks/memory-game/useMemoryGame";
+import { isTerminalStatus } from "@/lib/memory-game/game";
 import styles from "./MemoryGame.module.css";
 
 export function MemoryGame() {
@@ -21,8 +21,22 @@ export function MemoryGame() {
     toggleSound,
   } = useMemoryGame();
 
+  const statusMessage =
+    state.status === "won"
+      ? "You won the game."
+      : state.status === "lost"
+        ? "Game over. Attempts exhausted."
+        : state.status === "checking"
+          ? "Checking selected tiles."
+          : isRestarting
+            ? "Restarting board."
+            : "";
+
   return (
     <div className={styles.root}>
+      <div className={styles.srOnly} aria-live="polite" aria-atomic="true">
+        {statusMessage}
+      </div>
       {state.status === "idle" ? (
         <StartScreen
           difficulty={state.difficulty}
