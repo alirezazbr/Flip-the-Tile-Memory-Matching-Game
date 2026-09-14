@@ -10,6 +10,7 @@ import styles from "./MemoryGame.module.css";
 export function MemoryGame() {
   const {
     state,
+    isRestarting,
     startGame,
     selectTile,
     restartGame,
@@ -33,7 +34,7 @@ export function MemoryGame() {
           <Scoreboard state={state} />
           <ControlBar
             isSoundEnabled={state.isSoundEnabled}
-            restartDisabled={state.isPaused}
+            restartDisabled={isRestarting || state.isPaused}
             onRestart={restartGame}
             onExit={exitGame}
             onToggleSound={toggleSound}
@@ -42,7 +43,7 @@ export function MemoryGame() {
             tiles={state.tiles}
             difficulty={state.difficulty}
             status={state.status}
-            isPaused={state.isPaused}
+            isPaused={state.isPaused || isRestarting}
             onSelectTile={selectTile}
           />
         </div>

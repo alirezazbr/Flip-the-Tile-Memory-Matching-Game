@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import {
   MISMATCH_FLIP_BACK_DELAY_MS,
   RESTART_REVEAL_DELAY_MS,
@@ -18,12 +18,12 @@ export function useMemoryGame() {
     undefined,
     createInitialGameState,
   );
+  const [isRestarting, setIsRestarting] = useState(false);
 
   const stateRef = useRef(state);
   const sessionIdRef = useRef(0);
   const timerIdsRef = useRef<Set<number>>(new Set());
   const handledSelectionRef = useRef<string | null>(null);
-  const isRestartingRef = useRef(false);
 
   useEffect(() => {
     stateRef.current = state;
@@ -108,42 +108,41 @@ export function useMemoryGame() {
   }, [schedule, state.selectedTileIds, state.status, state.tiles]);
 
   const startGame = useCallback(() => {
-    isRestartingRef.current = false;
+    setIsRestarting(false);
     invalidateSession();
     dispatch({ type: "START_GAME" });
   }, [invalidateSession]);
 
-  const selectTile = useCallback((tileId: string) => {
-    if (isRestartingRef.current) {
-      return;
-    }
-    dispatch({ type: "SELECT_TILE", tileId });
-  }, []);
+  const selectTile = useCallback(
+    (tileId: string) => {
+      if (isRestarting) {
+        return;
+      }
+      dispatch({ type: "SELECT_TILE", tileId });
+    },
+    [isRestarting],
+  );
 
   const restartGame = useCallback(() => {
     const current = stateRef.current;
 
-    if (
-      isRestartingRef.current ||
-      current.status === "idle" ||
-      current.tiles.length === 0
-    ) {
+    if (isRestarting || current.status === "idle" || current.tiles.length === 0) {
       return;
     }
 
-    isRestartingRef.current = true;
+    setIsRestarting(true);
     const sessionId = invalidateSession();
     dispatch({ type: "REVEAL_ALL_TILES" });
 
     schedule(sessionId, RESTART_REVEAL_DELAY_MS, () => {
       const tiles = createGameTiles(stateRef.current.difficulty);
       dispatch({ type: "RESTART_GAME", tiles });
-      isRestartingRef.current = false;
+      setIsRestarting(false);
     });
-  }, [invalidateSession, schedule]);
+  }, [invalidateSession, isRestarting, schedule]);
 
   const exitGame = useCallback(() => {
-    isRestartingRef.current = false;
+    setIsRestarting(false);
     invalidateSession();
     dispatch({ type: "EXIT_GAME" });
   }, [invalidateSession]);
@@ -162,6 +161,7 @@ export function useMemoryGame() {
 
   return {
     state,
+    isRestarting,
     startGame,
     selectTile,
     restartGame,
