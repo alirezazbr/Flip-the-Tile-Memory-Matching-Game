@@ -1,10 +1,11 @@
 import { DifficultySelector } from "@/components/memory-game/DifficultySelector/DifficultySelector";
-import type { Difficulty } from "@/types/memory-game";
+import type { Difficulty, HighScore } from "@/types/memory-game";
 import styles from "./StartScreen.module.css";
 
 export interface StartScreenProps {
   difficulty: Difficulty;
   isSoundEnabled: boolean;
+  highScores: HighScore[];
   onDifficultyChange: (difficulty: Difficulty) => void;
   onStart: () => void;
   onToggleSound: () => void;
@@ -13,10 +14,13 @@ export interface StartScreenProps {
 export function StartScreen({
   difficulty,
   isSoundEnabled,
+  highScores,
   onDifficultyChange,
   onStart,
   onToggleSound,
 }: StartScreenProps) {
+  const best = highScores[0];
+
   return (
     <section className={styles.screen} aria-labelledby="memory-flip-title">
       <div className={styles.panel}>
@@ -33,6 +37,12 @@ export function StartScreen({
           value={difficulty}
           onChange={onDifficultyChange}
         />
+
+        <p className={styles.highScore} aria-live="polite">
+          {best
+            ? `Best ${difficulty}: ${best.score} in ${best.attempts} attempts`
+            : `No high scores for ${difficulty} yet`}
+        </p>
 
         <button type="button" className={styles.startButton} onClick={onStart}>
           Start

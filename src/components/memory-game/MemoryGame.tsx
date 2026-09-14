@@ -7,6 +7,7 @@ import { GameResult } from "@/components/memory-game/GameResult/GameResult";
 import { Scoreboard } from "@/components/memory-game/Scoreboard/Scoreboard";
 import { StartScreen } from "@/components/memory-game/StartScreen/StartScreen";
 import { useGameSound } from "@/hooks/memory-game/useGameSound";
+import { useHighScores } from "@/hooks/memory-game/useHighScores";
 import { useMemoryGame } from "@/hooks/memory-game/useMemoryGame";
 import { isTerminalStatus } from "@/lib/memory-game/game";
 import styles from "./MemoryGame.module.css";
@@ -23,11 +24,28 @@ export function MemoryGame() {
     toggleSound,
   } = useMemoryGame();
   const sound = useGameSound(state.isSoundEnabled);
+  const { saveScore, getTopScores } = useHighScores();
   const previousRef = useRef({
     status: state.status,
     matchedCount: state.matchedTileIds.length,
     selectedCount: state.selectedTileIds.length,
   });
+  const recordedWinRef = useRef(false);
+
+  useEffect(() => {
+    if (state.status === "won" && !recordedWinRef.current) {
+      recordedWinRef.current = true;
+      saveScore({
+        difficulty: state.difficulty,
+        score: state.score,
+        attempts: state.attempts,
+      });
+    }
+
+    if (state.status !== "won") {
+      recordedWinRef.current = false;
+    }
+  }, [saveScore, state.attempts, state.difficulty, state.score, state.status]);
 
   useEffect(() => {
     const previous = previousRef.current;
@@ -88,6 +106,7 @@ export function MemoryGame() {
         <StartScreen
           difficulty={state.difficulty}
           isSoundEnabled={state.isSoundEnabled}
+          highScores={getTopScores(state.difficulty)}
           onDifficultyChange={setDifficulty}
           onStart={() => {
             sound.playClick();

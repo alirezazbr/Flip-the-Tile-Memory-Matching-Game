@@ -43,6 +43,13 @@
   color: var(--game-muted);
 }
 
+.highScore {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--game-ink);
+}
+
 .startButton {
   width: min(100%, 14rem);
   margin-top: 0.35rem;
