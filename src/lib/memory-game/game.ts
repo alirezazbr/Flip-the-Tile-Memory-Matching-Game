@@ -94,3 +94,9 @@ export function getRemainingAttempts(
 ): number {
   return Math.max(0, maxAttempts - attempts);
 }
+
+export function isTerminalStatus(
+  status: GameState["status"],
+): status is "won" | "lost" {
+  return status === "won" || status === "lost";
+}
