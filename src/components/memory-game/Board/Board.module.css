@@ -1,0 +1,19 @@
+.board {
+  display: grid;
+  width: min(100%, 56rem);
+  margin-inline: auto;
+  gap: clamp(0.35rem, 1.4vw, 0.75rem);
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.cell {
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .board {
+    width: 100%;
+    gap: clamp(0.25rem, 1.5vw, 0.45rem);
+    padding: 0.65rem;
+  }
+}

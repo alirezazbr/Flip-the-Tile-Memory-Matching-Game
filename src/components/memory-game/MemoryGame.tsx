@@ -1,5 +1,6 @@
 "use client";
 
+import { Board } from "@/components/memory-game/Board/Board";
 import { StartScreen } from "@/components/memory-game/StartScreen/StartScreen";
 import { useMemoryGame } from "@/hooks/memory-game/useMemoryGame";
 import styles from "./MemoryGame.module.css";
@@ -8,6 +9,7 @@ export function MemoryGame() {
   const {
     state,
     startGame,
+    selectTile,
     setDifficulty,
     toggleSound,
   } = useMemoryGame();
@@ -23,12 +25,14 @@ export function MemoryGame() {
           onToggleSound={toggleSound}
         />
       ) : (
-        <div className={styles.placeholder} role="status">
-          <p>Game started ({state.difficulty}). Board UI comes next.</p>
-          <p>
-            Tiles: {state.tiles.length} · Attempts: {state.attempts}/
-            {state.maxAttempts}
-          </p>
+        <div className={styles.playArea}>
+          <Board
+            tiles={state.tiles}
+            difficulty={state.difficulty}
+            status={state.status}
+            isPaused={state.isPaused}
+            onSelectTile={selectTile}
+          />
         </div>
       )}
     </div>
