@@ -4,6 +4,7 @@ import {
   createGameTiles,
   isGameLost,
   isGameWon,
+  isMatch,
 } from "@/lib/memory-game/game";
 import { calculateScore } from "@/lib/memory-game/scoring";
 import type { GameAction, GameState, Tile } from "@/types/memory-game";
@@ -87,6 +88,22 @@ function matchTiles(
   }
 
   const [firstId, secondId] = tileIds;
+
+  if (firstId === secondId) {
+    return state;
+  }
+
+  const firstTile = state.tiles.find((tile) => tile.id === firstId);
+  const secondTile = state.tiles.find((tile) => tile.id === secondId);
+
+  if (!firstTile || !secondTile || !isMatch(firstTile, secondTile)) {
+    return state;
+  }
+
+  if (firstTile.isMatched || secondTile.isMatched) {
+    return state;
+  }
+
   const tiles = state.tiles.map((tile) =>
     tile.id === firstId || tile.id === secondId
       ? { ...tile, isFlipped: true, isMatched: true }

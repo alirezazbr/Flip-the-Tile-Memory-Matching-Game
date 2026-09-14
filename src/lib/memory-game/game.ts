@@ -62,7 +62,7 @@ export function canSelectTile(
 
 /** Match by shared pairId — never by unique tile id. */
 export function isMatch(first: Tile, second: Tile): boolean {
-  return first.pairId === second.pairId;
+  return first.id !== second.id && first.pairId === second.pairId;
 }
 
 export function isGameWon(tiles: Tile[]): boolean {
