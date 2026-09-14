@@ -6,6 +6,12 @@ import {
 
 export type ScoreEvent = "match" | "mismatch" | "complete";
 
+export const SCORE_VALUES = {
+  match: MATCH_SCORE,
+  mismatch: MISMATCH_PENALTY,
+  complete: COMPLETION_BONUS,
+} as const;
+
 /**
  * Deterministic score update. Score never goes below zero.
  */
