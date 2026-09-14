@@ -2,8 +2,10 @@
 
 import { Board } from "@/components/memory-game/Board/Board";
 import { ControlBar } from "@/components/memory-game/ControlBar/ControlBar";
+import { GameResult } from "@/components/memory-game/GameResult/GameResult";
 import { Scoreboard } from "@/components/memory-game/Scoreboard/Scoreboard";
 import { StartScreen } from "@/components/memory-game/StartScreen/StartScreen";
+import { isTerminalStatus } from "@/lib/memory-game/game";
 import { useMemoryGame } from "@/hooks/memory-game/useMemoryGame";
 import styles from "./MemoryGame.module.css";
 
@@ -39,13 +41,25 @@ export function MemoryGame() {
             onExit={exitGame}
             onToggleSound={toggleSound}
           />
-          <Board
-            tiles={state.tiles}
-            difficulty={state.difficulty}
-            status={state.status}
-            isPaused={state.isPaused || isRestarting}
-            onSelectTile={selectTile}
-          />
+          <div className={styles.boardShell}>
+            <Board
+              tiles={state.tiles}
+              difficulty={state.difficulty}
+              status={state.status}
+              isPaused={state.isPaused || isRestarting}
+              onSelectTile={selectTile}
+            />
+            {isTerminalStatus(state.status) ? (
+              <GameResult
+                outcome={state.status}
+                score={state.score}
+                attempts={state.attempts}
+                maxAttempts={state.maxAttempts}
+                onPlayAgain={restartGame}
+                onChangeDifficulty={exitGame}
+              />
+            ) : null}
+          </div>
         </div>
       )}
     </div>

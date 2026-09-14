@@ -16,3 +16,10 @@
   width: 100%;
   padding: clamp(0.75rem, 2vw, 1.5rem);
 }
+
+.boardShell {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
