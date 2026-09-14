@@ -260,7 +260,12 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
-    case "EXIT_GAME":
+    case "EXIT_GAME": {
+      if (state.status === "idle") {
+        return state;
+      }
+
+      // Return to start screen without counting a loss.
       return {
         ...state,
         status: "idle",
@@ -272,6 +277,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         score: 0,
         isPaused: false,
       };
+    }
 
     case "SET_DIFFICULTY": {
       if (state.status !== "idle") {
