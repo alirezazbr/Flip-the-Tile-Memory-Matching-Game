@@ -87,3 +87,10 @@ export function countMatchedPairs(tiles: Tile[]): number {
   );
   return matchedPairIds.size;
 }
+
+export function getRemainingAttempts(
+  attempts: number,
+  maxAttempts: number,
+): number {
+  return Math.max(0, maxAttempts - attempts);
+}

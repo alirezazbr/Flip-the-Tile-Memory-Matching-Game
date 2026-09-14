@@ -115,6 +115,29 @@ function matchTiles(
 
   if (won) {
     score = calculateScore(score, "complete");
+
+    return {
+      ...state,
+      tiles,
+      selectedTileIds: [],
+      matchedTileIds: matchedIdsFromTiles(tiles),
+      score,
+      status: "won",
+      wins: state.wins + 1,
+    };
+  }
+
+  // Last attempt used on a non-winning match — no further tries remain.
+  if (state.attempts >= state.maxAttempts) {
+    return {
+      ...state,
+      tiles,
+      selectedTileIds: [],
+      matchedTileIds: matchedIdsFromTiles(tiles),
+      score,
+      status: "lost",
+      losses: state.losses + 1,
+    };
   }
 
   return {
@@ -123,8 +146,7 @@ function matchTiles(
     selectedTileIds: [],
     matchedTileIds: matchedIdsFromTiles(tiles),
     score,
-    status: won ? "won" : "playing",
-    wins: won ? state.wins + 1 : state.wins,
+    status: "playing",
   };
 }
 
