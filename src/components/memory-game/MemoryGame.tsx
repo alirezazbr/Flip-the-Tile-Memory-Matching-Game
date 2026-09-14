@@ -1,6 +1,7 @@
 "use client";
 
 import { Board } from "@/components/memory-game/Board/Board";
+import { Scoreboard } from "@/components/memory-game/Scoreboard/Scoreboard";
 import { StartScreen } from "@/components/memory-game/StartScreen/StartScreen";
 import { useMemoryGame } from "@/hooks/memory-game/useMemoryGame";
 import styles from "./MemoryGame.module.css";
@@ -26,6 +27,7 @@ export function MemoryGame() {
         />
       ) : (
         <div className={styles.playArea}>
+          <Scoreboard state={state} />
           <Board
             tiles={state.tiles}
             difficulty={state.difficulty}
